@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Combine Coach</title>
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#0b0d10" />
+<link rel="stylesheet" href="app.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== HEADER ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">
+        <span class="bar bar-a"></span><span class="bar bar-b"></span><span class="bar bar-c"></span>
+      </span>
+      <div class="brand-text">
+        <h1>Combine Coach</h1>
+        <p id="accountLabel">$50K Combine</p>
+      </div>
+    </div>
+    <button id="settingsBtn" class="icon-btn" title="Configuración" aria-label="Configuración">⚙</button>
+  </header>
+
+  <main class="scroll-area">
+
+    <!-- ===== ESTADO GENERAL ===== -->
+    <div id="statusBand" class="status-band status-safe">
+      <span id="statusDot" class="status-dot"></span>
+      <span id="statusText">Dentro de límites — sigue así</span>
+    </div>
+
+    <!-- ===== MEDIDOR PRINCIPAL ===== -->
+    <section class="gauge-card">
+      <div class="gauge-card-head">
+        <h2>Colchón hasta el Max Loss Limit</h2>
+        <span id="mllAmountLeft" class="gauge-amount">$2,000</span>
+      
