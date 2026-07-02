@@ -1,4 +1,4 @@
-var CACHE = 'aura-v1';
+var CACHE = 'aura-v2';
 var APP_SHELL = [
   './',
   './index.html',
