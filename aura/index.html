@@ -471,9 +471,9 @@
         <button class="dtab" onclick="openModal('editorial')">🎵 Spotify Editorial Pitch</button>
       </div>
       <div class="dp on" id="dp-releases">
-        <div class="rel-card"><div class="rel-art">🌊</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Marea</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Single · Jun 1, 2026 · ISRC: USRC17607839</div><div style="display:flex;gap:14px;margin-top:6px;"><span style="font-size:12px;color:var(--t2);">Spotify <strong style="color:var(--t1)">6,240</strong></span><span style="font-size:12px;color:var(--t2);">Apple <strong style="color:var(--t1)">1,820</strong></span><span style="font-size:12px;color:var(--t2);">TikTok <strong style="color:var(--t1)">4.2K</strong></span></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;"><span class="rs rs-live">● Live</span><button class="btn" onclick="toast('Opening release details...')">Details</button></div></div>
-        <div class="rel-card"><div class="rel-art">☀️</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Verano Roto</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Single · Mar 14, 2026 · ISRC: USRC17607821</div><div style="display:flex;gap:14px;margin-top:6px;"><span style="font-size:12px;color:var(--t2);">Spotify <strong style="color:var(--t1)">3,180</strong></span><span style="font-size:12px;color:var(--t2);">Apple <strong style="color:var(--t1)">940</strong></span></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;"><span class="rs rs-live">● Live</span><button class="btn" onclick="toast('Opening details...')">Details</button></div></div>
-        <div class="rel-card" style="border-color:var(--as)"><div class="rel-art">🌙</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Sin Señal</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Submitted Jul 2, 2026 · Processing</div><div style="font-size:12px;color:var(--amber);margin-top:6px;">Estimated live: Jul 10, 2026</div></div><span class="rs rs-proc">⏳ Processing</span></div>
+        <div class="rel-card"><div class="rel-art">🌊</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Marea</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Single · Jun 1, 2026 · ISRC: USRC17607839</div><div style="display:flex;gap:14px;margin-top:6px;"><span style="font-size:12px;color:var(--t2);">Spotify <strong style="color:var(--t1)">6,240</strong></span><span style="font-size:12px;color:var(--t2);">Apple <strong style="color:var(--t1)">1,820</strong></span><span style="font-size:12px;color:var(--t2);">TikTok <strong style="color:var(--t1)">4.2K</strong></span></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;"><span class="rs rs-live">● Live</span><button class="btn" onclick="openReleaseDetail('marea')">Details</button></div></div>
+        <div class="rel-card"><div class="rel-art">☀️</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Verano Roto</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Single · Mar 14, 2026 · ISRC: USRC17607821</div><div style="display:flex;gap:14px;margin-top:6px;"><span style="font-size:12px;color:var(--t2);">Spotify <strong style="color:var(--t1)">3,180</strong></span><span style="font-size:12px;color:var(--t2);">Apple <strong style="color:var(--t1)">940</strong></span></div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;"><span class="rs rs-live">● Live</span><button class="btn" onclick="openReleaseDetail('verano')">Details</button></div></div>
+        <div class="rel-card" style="border-color:var(--as)"><div class="rel-art">🌙</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">Sin Señal</div><div style="font-size:12px;color:var(--t3);margin-top:3px;">Submitted Jul 2, 2026 · Processing</div><div style="font-size:12px;color:var(--amber);margin-top:6px;">Estimated live: Jul 10, 2026</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;"><span class="rs rs-proc">⏳ Processing</span><button class="btn" onclick="openReleaseDetail('sinsenal')">Details</button></div></div>
         <div style="background:var(--s1);border:1px dashed var(--b);border-radius:var(--r);padding:24px;text-align:center;margin-top:4px;cursor:pointer;" onclick="dTab('new',null)">
           <div style="font-size:28px;margin-bottom:8px;">＋</div>
           <div style="font-size:14px;font-weight:600;">Distribute a new release</div>
@@ -980,23 +980,26 @@
 <div class="modal" id="modal-pitch">
   <div class="mbox">
     <div class="mttl">📋 Pitch email — Indie Chill playlist</div>
-    <div class="mbody" id="ptxt">Subject: Submission — "Marea" by María Castro
+    <div class="mbody" id="ptxt">Subject: "Marea" — a late-night one for Indie Chill
 
-Hi [Curator name],
+Hi [curator's first name],
 
-I'm María Castro, an independent artist. I'd like to submit "Marea" for Indie Chill.
+I'll keep this short because I know how many of these you get.
 
-Why it fits:
-· Tempo: 92 BPM (matches your avg of 88–96 BPM)
-· Key: A minor / acoustic-driven
-· Mood: late night, introspective — consistent with 80% of your current playlist
+I'm María, an independent artist from Mexico City. I've had Indie Chill on during my own late nights for a long time, and when I finished "Marea" it was honestly the first place I thought of — it lives in that same quiet, introspective space as a lot of what you already have on there.
 
-The track has 6,240 streams in its first 60 days, all organic.
+I wrote it at 2am after a season I didn't know how to talk about, and recorded the vocal in one take because every re-take lost the thing that made it true. It's acoustic-driven, slow-burning, around 92 BPM in A minor — it won't fight the songs around it.
 
-Spotify: open.spotify.com/track/[your-link]
+Since it came out on June 1 it's reached 6,240 streams completely organically — no ads, no playlist pushes — and about 1 in 5 listeners saves it, which tells me people are coming back to it rather than skipping past.
 
-Thank you,
-— María Castro</div>
+Listen here: open.spotify.com/track/[your-link]
+(If you're short on time, the moment that makes the song land is at 0:46.)
+
+Either way, thank you for actually listening to submissions — playlists that are still curated by a person are the reason artists like me get found.
+
+Warmly,
+María Castro
+@mariacastro · open to any feedback, even a no</div>
     <div class="macts"><button class="btn" onclick="closeModal('pitch')">Close</button><button class="btn pri" onclick="copyPitch()">📋 Copy to clipboard</button></div>
   </div>
 </div>
@@ -1099,7 +1102,7 @@ Thank you,
       </div>
     </div>
     <div class="fld"><label>Pitch to Spotify (your story — max 500 chars)</label>
-      <textarea class="finput" rows="4" style="resize:none;" id="sp-pitch">"Lluvia de Julio" is a song about the specific kind of loneliness that summer rain brings — when everyone seems to be somewhere else. I recorded it in one take at 2am after a long silence. I think it will resonate with listeners of Kali Uchis and Natalia Lafourcade."</textarea>
+      <textarea class="finput" rows="5" style="resize:none;" id="sp-pitch">"Lluvia de Julio" is about the specific loneliness of summer rain — when the whole city seems to be somewhere else, together. I wrote and recorded it in one 2am take in my apartment in Mexico City and kept that take, imperfections and all, because re-singing it felt like lying. Close vocals over acoustic guitar, 92 BPM. For listeners of Natalia Lafourcade, Kali Uchis and Adrianne Lenker. My previous single "Marea" reached 6,240 streams organically in 60 days with an 18% save rate.</textarea>
     </div>
     <div style="background:var(--s2);border-radius:8px;padding:12px;margin-bottom:14px;">
       <div style="font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">Pitch notes</div>
@@ -1177,7 +1180,7 @@ Thank you,
   </div>
   <div class="ai-msgs" id="ai-msgs"></div>
   <!-- AURA MEMORY — visible context -->
-  <div id="aura-memory" style="border-top:1px solid var(--b);padding:12px 14px;display:none;">
+  <div id="aura-memory" style="border-top:1px solid var(--b);padding:12px 14px;display:none;max-height:150px;overflow-y:auto;flex-shrink:0;">
     <div style="font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;">What Aura remembers</div>
     <div class="mem-item"><div class="mem-when">3 weeks ago</div><div class="mem-txt">You released <strong>"Verano Roto"</strong> on a Thursday — saves rate was <strong>14% lower</strong> than Friday releases. Aura scheduled "Lluvia de Julio" for a Friday.</div></div>
     <div class="mem-item"><div class="mem-when">Last month</div><div class="mem-txt">The curator at <strong>Indie Chill</strong> typically responds <strong>within 3 days</strong> and prefers pitches under 120 words with a Spotify link in the first sentence.</div></div>
@@ -1554,6 +1557,21 @@ Thank you,
     <div class="macts">
       <button class="btn" onclick="closeModal('add-pipe')">Cancel</button>
       <button class="btn pri" onclick="closeModal('add-pipe');toast('Added to pipeline!')">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELEASE DETAIL -->
+<div class="modal" id="modal-release">
+  <div class="mbox" style="max-width:480px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div class="mttl" id="rel-title" style="margin-bottom:0;">Release</div>
+      <button class="btn" onclick="closeModal('release')">✕</button>
+    </div>
+    <div id="rel-body"></div>
+    <div class="macts" style="margin-top:14px;">
+      <button class="btn" onclick="closeModal('release')">Close</button>
+      <button class="btn pri" id="rel-analytics-btn">📊 Full analytics</button>
     </div>
   </div>
 </div>

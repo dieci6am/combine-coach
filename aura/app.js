@@ -449,14 +449,28 @@ function renderGoals() {
     +'<div class="traj-box"><div class="traj-v up">+'+Math.round((g.target-g.cur)*0.03).toLocaleString()+'</div><div class="traj-l">Needed this week</div></div>'
     +'</div></div>'
     +'<div class="goal-list" style="margin-top:14px;">'
-    + all.slice(1).map(function(g2){
+    + all.slice(1).map(function(g2, idx){
       var p2=Math.round(g2.pct||Math.round((g2.cur/g2.target)*100));
-      return '<div class="goal-card"><div class="goal-card-top"><div style="font-size:14px;font-weight:600;">'+g2.type+'</div><span class="goal-type">'+p2+'%</span></div>'
+      // Goals beyond the role's base data were added by the user — removable
+      var userIdx = (idx + 1) - base.length;
+      var removeBtn = userIdx >= 0
+        ? '<button class="btn" style="padding:2px 8px;font-size:11px;margin-left:8px;" title="Remove goal" onclick="removeGoal('+userIdx+')">✕</button>'
+        : '';
+      return '<div class="goal-card"><div class="goal-card-top"><div style="font-size:14px;font-weight:600;">'+escHTML(g2.type)+'</div><div style="display:flex;align-items:center;"><span class="goal-type">'+p2+'%</span>'+removeBtn+'</div></div>'
         +'<div class="goal-prog-bar" style="height:7px;margin-bottom:6px;"><div class="goal-prog-fill" style="width:'+p2+'%"></div></div>'
         +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t3);"><span>'+(g2.cur||'—').toLocaleString()+' → '+(g2.target||'—').toLocaleString()+'</span><span>By '+g2.deadline+'</span></div>'
         +'</div>';
     }).join('')
     +'</div>';
+}
+
+function removeGoal(userIdx) {
+  var goals = userGoalsFor(currentRole);
+  if (userIdx < 0 || userIdx >= goals.length) return;
+  goals.splice(userIdx, 1);
+  saveState();
+  renderGoals();
+  toast('Goal removed.');
 }
 function fmtDate(d) {
   if(!d) return 'Dec 31, 2026';
@@ -471,6 +485,9 @@ function addGoal() {
   if(!target){toast('Enter a target number first.');return;}
   userGoalsFor(currentRole).push({type:type,cur:0,target:target,deadline:deadline,pct:0});
   saveState();
+  // Clear the form so the next goal starts fresh
+  document.getElementById('goal-target').value = '';
+  document.getElementById('goal-deadline').value = '';
   closeModal('newgoal');
   renderGoals();
   toast('Goal set! Aura will track your progress weekly.');
@@ -564,7 +581,7 @@ function openFollowUp(target, work) {
   var r = ROLES[currentRole];
   var name = profileName();
   var templates = {
-    musician: 'Subject: Following up — "'+work+'" for consideration\n\nHi '+target+' team,\n\nI sent you "'+work+'" a few days ago and wanted to follow up to make sure it reached you.\n\n"'+work+'" has been getting strong engagement — streaming +18% week over week — and I think it could be a great fit for your listeners.\n\nI\'d love any feedback you can share, even if it\'s not the right time.\n\nThank you for your time,\n'+name,
+    musician: 'Subject: Re: "'+work+'" — just floating this back up\n\nHi again,\n\nI sent "'+work+'" over to '+target+' about a week ago — no worries at all if it\'s buried, I know the inbox never stops.\n\nOne small update since then: the song has kept growing on its own (up 18% week over week, all organic), so people do seem to be connecting with it.\n\nIf it\'s not right for the playlist, a one-line "not for us" genuinely helps me too — I\'d rather know than wonder.\n\nEither way, thanks for the time you put into curating.\n\n'+name,
     producer: 'Hi '+target+',\n\nJust following up on "'+work+'" I sent over. It\'s been getting strong response from artists I\'ve shown it to.\n\nHappy to send a different version, a full pack, or jump on a quick call.\n\nBest,\n'+name,
     director: 'Hi '+target+' team,\n\nFollowing up on my proposal for "'+work+'" I sent a few days ago.\n\nI\'m flexible on scope and timing — happy to jump on a 15-min call to see if there\'s a fit.\n\nBest,\n'+name,
     photo: 'Hi '+target+',\n\nJust wanted to follow up on the portfolio I sent for "'+work+'".\n\nI have open dates in July and would love to work together if the timing works on your end.\n\nBest,\n'+name,
@@ -1449,8 +1466,12 @@ function toggleAIChat() {
   if (aiOpen) {
     p.classList.add('open');
     initAIChat();
+    // Memory panel only for fresh chats — once a conversation exists it
+    // steals space the message list needs for scrolling.
     var mem = document.getElementById('aura-memory');
-    if (mem) mem.style.display = 'block';
+    if (mem) mem.style.display = state.aiHistory.length ? 'none' : 'block';
+    var msgs = document.getElementById('ai-msgs');
+    if (msgs) msgs.scrollTop = msgs.scrollHeight;
   } else {
     p.classList.remove('open');
   }
@@ -1945,6 +1966,72 @@ function createRelease() {
   if (title && !title.value.trim()) { title.focus(); return; }
   closeModal('new-release');
   toast('✓ Release workspace created for "' + (title ? title.value : 'New release') + '"!');
+}
+
+// ── RELEASE DETAILS ────────────────────────────────────────────
+var RELEASES = {
+  marea: {
+    emoji: '🌊', title: 'Marea', type: 'Single', date: 'Jun 1, 2026',
+    isrc: 'USRC17607839', status: 'Live', statusColor: 'var(--green)',
+    platforms: [['Spotify', '6,240 streams'], ['Apple Music', '1,820 streams'], ['TikTok', '4,200 uses'], ['YouTube Music', '980 streams'], ['Amazon Music', '310 streams']],
+    stats: [['Revenue to date', '$31.20'], ['Save rate', '18% (vs 6% avg)'], ['Playlist adds', '2 (Guitar & Soul, Indie por Siempre)'], ['Best day', 'Jun 21 — 412 streams']],
+    note: 'Trending +18% month over month. Bogotá is the fastest-growing listener city — 34% of new listeners this week.',
+    analytics: ['Marea', 6240, 18, [3200, 3800, 4400, 4900, 5300, 5700, 6000, 6240]]
+  },
+  verano: {
+    emoji: '☀️', title: 'Verano Roto', type: 'Single', date: 'Mar 14, 2026',
+    isrc: 'USRC17607821', status: 'Live', statusColor: 'var(--green)',
+    platforms: [['Spotify', '3,180 streams'], ['Apple Music', '940 streams'], ['YouTube Music', '410 streams'], ['Amazon Music', '120 streams']],
+    stats: [['Revenue to date', '$18.40'], ['Save rate', '11%'], ['Playlist adds', '1 (Indie por Siempre)'], ['First 30 days', '2,940 streams']],
+    note: 'Your first release to cross 10,000 lifetime streams. The launch playbook that worked: 3 pitches in the first 48 hours + TikTok teaser the week before.',
+    analytics: ['Verano Roto', 3180, 5, [2400, 2600, 2800, 2900, 3000, 3050, 3100, 3180]]
+  },
+  sinsenal: {
+    emoji: '🌙', title: 'Sin Señal', type: 'Single', date: 'Submitted Jul 2, 2026',
+    isrc: 'Reissue pending (metadata conflict)', status: 'Processing', statusColor: 'var(--amber)',
+    platforms: [['Spotify', 'In review'], ['Apple Music', 'In review'], ['All others', 'Queued']],
+    stats: [['Estimated live', 'Jul 10, 2026'], ['Open case', 'ISRC conflict — new code expected Jul 2'], ['Pre-saves', '84']],
+    note: 'Distribution is on track. The ISRC conflict is being resolved by the distributor and does not delay the go-live estimate.',
+    analytics: null
+  }
+};
+
+function openReleaseDetail(id) {
+  var r = RELEASES[id];
+  if (!r) return;
+  var t = document.getElementById('rel-title');
+  var b = document.getElementById('rel-body');
+  if (t) t.textContent = r.emoji + ' ' + r.title;
+  if (b) b.innerHTML =
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">'
+    + '<span style="background:var(--s3);color:var(--t2);padding:4px 10px;border-radius:20px;font-size:12px;">' + r.type + ' · ' + r.date + '</span>'
+    + '<span style="background:var(--s3);color:' + r.statusColor + ';padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;">● ' + r.status + '</span>'
+    + '<span style="background:var(--s3);color:var(--t3);padding:4px 10px;border-radius:20px;font-size:12px;font-family:monospace;">' + r.isrc + '</span>'
+    + '</div>'
+    + '<div style="background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:14px;margin-bottom:12px;">'
+    + '<div style="font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Platforms</div>'
+    + r.platforms.map(function(p) {
+        return '<div style="display:flex;justify-content:space-between;font-size:13px;padding:5px 0;"><span style="color:var(--t2);">' + p[0] + '</span><span style="color:var(--t1);font-weight:600;">' + p[1] + '</span></div>';
+      }).join('')
+    + '</div>'
+    + '<div style="background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:14px;margin-bottom:12px;">'
+    + '<div style="font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Performance</div>'
+    + r.stats.map(function(s) {
+        return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:5px 0;"><span style="color:var(--t2);flex-shrink:0;">' + s[0] + '</span><span style="color:var(--t1);text-align:right;">' + s[1] + '</span></div>';
+      }).join('')
+    + '</div>'
+    + '<div style="font-size:13px;color:var(--t2);line-height:1.7;background:var(--s2);border-radius:8px;padding:12px 14px;">'
+    + '<span style="font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;">Aura insight</span>'
+    + r.note + '</div>';
+  var ab = document.getElementById('rel-analytics-btn');
+  if (ab) {
+    ab.style.display = r.analytics ? 'inline-flex' : 'none';
+    ab.onclick = function() {
+      closeModal('release');
+      openAnalytics(r.analytics[0], r.analytics[1], r.analytics[2], r.analytics[3]);
+    };
+  }
+  openModal('release');
 }
 
 // Collab call
